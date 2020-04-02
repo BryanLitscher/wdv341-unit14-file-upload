@@ -28,16 +28,30 @@ if($_SERVER["REQUEST_METHOD"]=="POST" ) {
 	<style>
 		.error{color:red;}
 	</style>
+	<script>
+		function Filevalidation(){
+			document.getElementById("error").innerHTML="";
+			f = document.getElementById("fileSelect");
+			console.log(f.files);
+			if(f.files.length==1){
+				//alert("im here");
+				console.log( f.files[0].size/(1024*1024))
+				if (f.files[0].size/(1024*1024) > 1){
+					document.getElementById("error").innerHTML="File is too big";
+				}
+			};
+			}
+	</script>
 </head>
 <body>
     <form action="index.php" method="post" enctype="multipart/form-data">
         <h2>Upload File</h2>
         <label for="fileSelect">Filename:</label>
-        <input type="file" name="photo" id="fileSelect">
+        <input type="file" name="photo" id="fileSelect" accept="image/*" onchange="Filevalidation()">
         <input type="submit" name="submit" value="Upload">
         <p><strong>Note:</strong> Only .jpg, .jpeg, .gif, .png formats allowed to a max size of 1 MB.</p>
     </form>
-	<p class="error"><?php echo $errMsg; ?></p>
+	<p id="error" class="error"><?php echo $errMsg; ?></p>
 	<?php  
 			if( !empty($filename) && file_exists("uploads/" . $filename)){
 				echo "<img src='" . "uploads/" . $filename . "'> ";
